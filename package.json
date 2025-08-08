@@ -26,11 +26,13 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "cypress": "^13.6.0",
-    "typescript": "^5.3.0",
-    "@types/node": "^20.10.0",
     "@badeball/cypress-cucumber-preprocessor": "^18.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
-    "esbuild": "^0.19.0"
+    "@types/node": "^20.10.0",
+    "axe-core": "^4.10.3",
+    "cypress": "^13.6.0",
+    "cypress-axe": "^1.6.0",
+    "esbuild": "^0.19.0",
+    "typescript": "^5.3.0"
   }
 }
