@@ -1,0 +1,36 @@
+{
+  "name": "cypress-typescript-web-api-tests",
+  "version": "1.0.0",
+  "description": "Cypress TypeScript tests for web and API validation with Cucumber support",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:web": "cypress run --spec 'cypress/e2e/web/**/*.cy.ts'",
+    "cypress:run:api": "cypress run --spec 'cypress/e2e/api/**/*.cy.ts'",
+    "cypress:run:cucumber": "cypress run --spec 'cypress/e2e/features/**/*.feature'",
+    "test:web": "npm run cypress:run:web",
+    "test:api": "npm run cypress:run:api",
+    "test:cucumber": "npm run cypress:run:cucumber",
+    "test:all": "npm run cypress:run"
+  },
+  "keywords": [
+    "cypress",
+    "typescript",
+    "testing",
+    "web",
+    "api",
+    "cucumber",
+    "bdd"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^13.6.0",
+    "typescript": "^5.3.0",
+    "@types/node": "^20.10.0",
+    "@badeball/cypress-cucumber-preprocessor": "^18.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "esbuild": "^0.19.0"
+  }
+}

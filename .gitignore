@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Cypress artifacts
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Cypress cache
+**/.cache/
+**/.cy/ 
+
+# Reports
+cypress/reports/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor/OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Env files
+.env
+.env.*
+
+# Build outputs
+/dist/
+/build/
