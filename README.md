@@ -1,5 +1,7 @@
 # Cypress TypeScript Project with Cucumber BDD
 
+![Cypress](https://github.com/rohitmvemmelil-spec/Test001/actions/workflows/cypress.yml/badge.svg)
+
 This project demonstrates automated testing using Cypress with TypeScript and Cucumber for Behavior Driven Development (BDD).
 
 ## Features

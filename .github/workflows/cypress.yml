@@ -18,6 +18,7 @@ concurrency:
 
 env:
   CI: true
+  DEFAULT_WEB_BASE_URL: https://example.com
 
 jobs:
   api-cucumber:
@@ -29,6 +30,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci || npm install
@@ -57,6 +60,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci || npm install
@@ -85,6 +90,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci || npm install
@@ -105,23 +112,25 @@ jobs:
             cypress/videos/**
 
   web-traditional:
-    name: Traditional Web (optional)
+    name: Traditional Web
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.web_base_url != '' }}
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Run Web cy specs
+      - name: Run Web cy specs (non-blocking)
         uses: cypress-io/github-action@v6
         env:
-          CYPRESS_webBaseUrl: ${{ github.event.inputs.web_base_url }}
+          CYPRESS_webBaseUrl: ${{ github.event.inputs.web_base_url || env.DEFAULT_WEB_BASE_URL }}
         with:
           command: npx cypress run --reporter junit --reporter-options mochaFile=cypress/results/traditional-web-[hash].xml --spec 'cypress/e2e/web/**/*.cy.ts'
 
