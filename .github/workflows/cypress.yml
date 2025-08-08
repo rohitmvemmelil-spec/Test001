@@ -1,0 +1,138 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      web_base_url:
+        description: 'Base URL for web tests (optional)'
+        required: false
+        default: ''
+
+concurrency:
+  group: cypress-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+
+jobs:
+  api-cucumber:
+    name: Cucumber API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run API Cucumber feature
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --reporter junit --reporter-options mochaFile=cypress/results/api-[hash].xml --spec 'cypress/e2e/features/api-users.feature'
+
+      - name: Upload results and artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-cucumber-artifacts
+          path: |
+            cypress/results/**/*.xml
+            cypress/screenshots/**
+            cypress/videos/**
+
+  web-offline-smoke:
+    name: Cucumber Web (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run offline web inline feature
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --reporter junit --reporter-options mochaFile=cypress/results/web-inline-[hash].xml --spec 'cypress/e2e/features/web-inline.feature'
+
+      - name: Upload results and artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-inline-artifacts
+          path: |
+            cypress/results/**/*.xml
+            cypress/screenshots/**
+            cypress/videos/**
+
+  api-traditional:
+    name: Traditional API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run API cy specs
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --reporter junit --reporter-options mochaFile=cypress/results/traditional-api-[hash].xml --spec 'cypress/e2e/api/**/*.cy.ts'
+
+      - name: Upload results and artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traditional-api-artifacts
+          path: |
+            cypress/results/**/*.xml
+            cypress/screenshots/**
+            cypress/videos/**
+
+  web-traditional:
+    name: Traditional Web (optional)
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.web_base_url != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Run Web cy specs
+        uses: cypress-io/github-action@v6
+        env:
+          CYPRESS_webBaseUrl: ${{ github.event.inputs.web_base_url }}
+        with:
+          command: npx cypress run --reporter junit --reporter-options mochaFile=cypress/results/traditional-web-[hash].xml --spec 'cypress/e2e/web/**/*.cy.ts'
+
+      - name: Upload results and artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traditional-web-artifacts
+          path: |
+            cypress/results/**/*.xml
+            cypress/screenshots/**
+            cypress/videos/**
+
+
