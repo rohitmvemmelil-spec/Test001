@@ -6,6 +6,11 @@ pipeline {
     }
   }
 
+  triggers {
+    // Run daily at a hashed time per Jenkins best practice
+    cron('H H * * *')
+  }
+
   options {
     timestamps()
     ansiColor('xterm')
